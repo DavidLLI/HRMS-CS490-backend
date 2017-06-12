@@ -40,11 +40,10 @@ function postEmployee(request, response) {
 		response.status(403).send({message: 'Employee name required'});
 		return;
 	}
-	const employee = new Employee();
-	employee.name = request.body.name;
-	employee.salary = request.body.salary || 0;
 
-	employee.save((err) => {
+	const nameQuery = {'name': request.body.name};
+
+	Employee.findOneAndUpdate(nameQuery, request.body, {upsert: true}, (err) => {
 		if (err) {
 			response.send(err);
 			return;
