@@ -1,11 +1,11 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Employee from './model';
-import salaryRouter from './salary';
+import availRouter from './availability';
 
 const employeeRouter = express.Router();
 
-employeeRouter.use('/salary', salaryRouter);
+employeeRouter.use('/availability', availRouter);
 
 employeeRouter.get('/', getAllEmployees);
 employeeRouter.get('/name/:name', getEmployeeByName);
@@ -16,7 +16,12 @@ mongoose.connect('localhost:27017');
 function getEmployeeByName(request, response) {
 	Employee.find({name: request.params.name}, (err, employee) => {
 		if (err) {
-			response.send(err);
+			response.status(404).send(err);
+			return;
+		}
+
+		if (employee.length === 0) {
+			response.status(404).send({message: 'Employee not found'});
 			return;
 		}
 

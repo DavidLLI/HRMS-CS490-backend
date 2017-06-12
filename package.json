@@ -7,6 +7,7 @@
     "babel-cli": "^6.24.1",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "lodash": "^4.17.4",
     "mongoose": "^4.10.5",
     "mongoose-unique-validator": "^1.0.5",
     "nodemon": "^1.11.0"
