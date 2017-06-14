@@ -2,10 +2,14 @@ import express from 'express';
 import mongoose from 'mongoose';
 import Employee from './model';
 import availRouter from './availability';
+import specialAvailRouter from './specialAvail';
+import timeoffRouter from './timeoff';
 
 const employeeRouter = express.Router();
 
 employeeRouter.use('/availability', availRouter);
+employeeRouter.use('/specialAvail', specialAvailRouter);
+employeeRouter.use('/timeoff', timeoffRouter);
 
 employeeRouter.get('/', getAllEmployees);
 employeeRouter.get('/name/:name', getEmployeeByName);

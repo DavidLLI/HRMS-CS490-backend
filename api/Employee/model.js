@@ -1,7 +1,6 @@
 import mongoose, {Schema} from 'mongoose';
 
-const timeModel = {hour: 0, min: 0};
-const dayModel = {startTime: timeModel, endTime: timeModel};
+const dayModel = {startTime: '00:00', endTime: '00:00'};
 
 const EmployeeSchema = new Schema({
 	name: { type: String, unique: true, required: true },
@@ -11,10 +10,11 @@ const EmployeeSchema = new Schema({
 											'Friday': dayModel, 'Saturday': dayModel } 
 				},
 	specialAvail: { type: Object, default: {} },
+	timeoff: { type: Object, default: {} },
 	timeSheet: { type: Object, default: {} },
 	startDate: { type: Date, default: '01/01/1970' },
 	endDate: { type: Date, default: '01/01/1970' }
-});
+}, { minimize: false });
 
 const Employee = mongoose.model('Employee', EmployeeSchema);
 
