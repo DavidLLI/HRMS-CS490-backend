@@ -6,14 +6,14 @@ import moment from 'moment';
 
 const specialAvailRouter = express.Router();
 
-specialAvailRouter.get('/name/:name', getSpecialAvail);
-specialAvailRouter.post('/name/:name', postSpecialAvail);
-specialAvailRouter.delete('/name/:name', deleteSpecialAvail);
+specialAvailRouter.get('/username/:username', getSpecialAvail);
+specialAvailRouter.post('/username/:username', postSpecialAvail);
+specialAvailRouter.delete('/username/:username', deleteSpecialAvail);
 
 mongoose.connect('localhost:27017');
 
 function getSpecialAvail(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -28,7 +28,7 @@ function getSpecialAvail(request, response) {
 }
 
 function postSpecialAvail(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -50,7 +50,7 @@ function postSpecialAvail(request, response) {
 		currentSpecialAvail[updateSpecialAvail.date].startTime = moment(updateSpecialAvail.time.startTime, 'HH:mm').format('HH:mm');
 		currentSpecialAvail[updateSpecialAvail.date].endTime = moment(updateSpecialAvail.time.endTime, 'HH:mm').format('HH:mm');
 
-		Employee.findOneAndUpdate({name: request.params.name}, {specialAvail: currentSpecialAvail}, (err) => {
+		Employee.findOneAndUpdate({username: request.params.username}, {specialAvail: currentSpecialAvail}, (err) => {
 			if (err) {
 				return err;
 			}
@@ -62,7 +62,7 @@ function postSpecialAvail(request, response) {
 }
 
 function deleteSpecialAvail(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -82,7 +82,7 @@ function deleteSpecialAvail(request, response) {
 		const currentSpecialAvail = employee[0].specialAvail;
 		delete currentSpecialAvail[deleteSpecialAvail.date];
 		
-		Employee.findOneAndUpdate({name: request.params.name}, {specialAvail: currentSpecialAvail}, (err) => {
+		Employee.findOneAndUpdate({username: request.params.username}, {specialAvail: currentSpecialAvail}, (err) => {
 			if (err) {
 				return err;
 			}

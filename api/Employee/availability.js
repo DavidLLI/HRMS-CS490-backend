@@ -8,12 +8,12 @@ const availRouter = express.Router();
 
 mongoose.connect('localhost:27017');
 
-availRouter.get('/name/:name', getAvailability);
-availRouter.get('/name/:name/date/:date', getAvailabilityOnDate);
-availRouter.post('/name/:name', postAvailabilty);
+availRouter.get('/username/:username', getAvailability);
+availRouter.get('/username/:username/date/:date', getAvailabilityOnDate);
+availRouter.post('/username/:username', postAvailabilty);
 
 function getAvailability(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -29,7 +29,7 @@ function getAvailability(request, response) {
 
 function getAvailabilityOnDate(request, response) {
 	// Logic: Special availability override regular availability, and timeoff override special availability
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -59,17 +59,17 @@ function getAvailabilityOnDate(request, response) {
 						});
 		}
 		else {
-			const dayName = moment(date, 'YYYY-MM-DD', true).format('dddd');
+			const dayusername = moment(date, 'YYYY-MM-DD', true).format('dddd');
 			response.json({type: 'regular availability',
-							startTime:employee[0].availability[dayName].startTime,
-							endTime: employee[0].availability[dayName].endTime
+							startTime:employee[0].availability[dayusername].startTime,
+							endTime: employee[0].availability[dayusername].endTime
 						});
 		}
 	});
 }
 
 function postAvailabilty(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -93,7 +93,7 @@ function postAvailabilty(request, response) {
 				currentAvail[day] = time;
 			}
 		});
-		Employee.findOneAndUpdate({name: request.params.name}, {availability: currentAvail}, (err) => {
+		Employee.findOneAndUpdate({username: request.params.username}, {availability: currentAvail}, (err) => {
 			if (err) {
 				return err;
 			}
