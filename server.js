@@ -1,10 +1,14 @@
 import router from './api/router';
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 const app = express();
 
-const port = 3000;
+const port = 4000;
+
+// Enable cors
+app.use(cors());
 
 // Add json parser
 app.use(bodyParser.urlencoded({ extended: true }));

@@ -6,14 +6,14 @@ import moment from 'moment';
 
 const timeoffRouter = express.Router();
 
-timeoffRouter.get('/name/:name', getTimeoff);
-timeoffRouter.post('/name/:name', postTimeoff);
-timeoffRouter.delete('/name/:name', deleteTimeoff);
+timeoffRouter.get('/username/:username', getTimeoff);
+timeoffRouter.post('/username/:username', postTimeoff);
+timeoffRouter.delete('/username/:username', deleteTimeoff);
 
 mongoose.connect('localhost:27017');
 
 function getTimeoff(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -28,7 +28,7 @@ function getTimeoff(request, response) {
 }
 
 function postTimeoff(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -50,7 +50,7 @@ function postTimeoff(request, response) {
 		currentTimeoff[updateTimeoff.date].startTime = moment(updateTimeoff.time.startTime, 'HH:mm').format('HH:mm');
 		currentTimeoff[updateTimeoff.date].endTime = moment(updateTimeoff.time.endTime, 'HH:mm').format('HH:mm');
 
-		Employee.findOneAndUpdate({name: request.params.name}, {timeoff: currentTimeoff}, (err) => {
+		Employee.findOneAndUpdate({username: request.params.username}, {timeoff: currentTimeoff}, (err) => {
 			if (err) {
 				return err;
 			}
@@ -62,7 +62,7 @@ function postTimeoff(request, response) {
 }
 
 function deleteTimeoff(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -82,7 +82,7 @@ function deleteTimeoff(request, response) {
 		const currentTimeoff = employee[0].timeoff;
 		delete currentTimeoff[deleteTimeoff.date];
 		
-		Employee.findOneAndUpdate({name: request.params.name}, {timeoff: currentTimeoff}, (err) => {
+		Employee.findOneAndUpdate({username: request.params.username}, {timeoff: currentTimeoff}, (err) => {
 			if (err) {
 				return err;
 			}

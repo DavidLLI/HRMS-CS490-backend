@@ -3,7 +3,10 @@ import mongoose, {Schema} from 'mongoose';
 const dayModel = {startTime: '00:00', endTime: '00:00'};
 
 const EmployeeSchema = new Schema({
-	name: { type: String, unique: true, required: true },
+	username: { type: String, required: true , unique: true} ,
+	password: { type: String, required: true },
+	firstName: { type: String },
+	lastName: { type: String },
 	salary: { type: Number, default: 0},
 	availability: { type: Object, default: { 'Sunday': dayModel, 'Monday': dayModel, 'Tuesday': dayModel, 
 											'Wednesday': dayModel, 'Thursday': dayModel, 

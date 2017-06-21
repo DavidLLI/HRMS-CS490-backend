@@ -12,13 +12,40 @@ employeeRouter.use('/specialAvail', specialAvailRouter);
 employeeRouter.use('/timeoff', timeoffRouter);
 
 employeeRouter.get('/', getAllEmployees);
-employeeRouter.get('/name/:name', getEmployeeByName);
+employeeRouter.get('/username/:username', getEmployeeByName);
 employeeRouter.post('/', postEmployee);
+
+employeeRouter.post('/signup', registerEmployee);
+
+employeeRouter.get('/username/:username/password/:password', employeeAuth);
 
 mongoose.connect('localhost:27017');
 
+function employeeAuth(request, response) {
+	Employee.find({username: request.params.username}, (err, employee) => {
+		if (err) {
+			response.status(404).send(err);
+			return;
+		}
+
+		console.log('login attempt');
+
+		if (employee.length === 0) {
+			response.status(404).send({message: 'User does not exist'});
+			return;
+		}
+
+		if (employee[0].password !== request.params.password) {
+			response.status(404).send({message: 'Password is wrong'});
+			return;
+		}
+
+		response.status(200).json({message: 'Login successful'});
+	});
+}
+
 function getEmployeeByName(request, response) {
-	Employee.find({name: request.params.name}, (err, employee) => {
+	Employee.find({username: request.params.username}, (err, employee) => {
 		if (err) {
 			response.status(404).send(err);
 			return;
@@ -44,15 +71,46 @@ function getAllEmployees(request, response) {
 	});
 }
 
-function postEmployee(request, response) {
-	if (!request.body.name) {
-		response.status(403).send({message: 'Employee name required'});
+function registerEmployee(request, response) {
+	if (!request.body.username) {
+		response.status(403).send({message: 'Employee username required'});
 		return;
 	}
 
-	const nameQuery = {'name': request.body.name};
+	if (!request.body.password) {
+		response.status(403).send({message: 'Employee password required'});
+		return;
+	}
 
-	Employee.findOneAndUpdate(nameQuery, request.body, {upsert: true}, (err) => {
+	const usernameQuery = {'username': request.body.username};
+
+	Employee.find(usernameQuery, (err, employee) => {
+		if (employee.length !== 0) {
+			response.status(403).send({message: 'Username existed!'});
+			return;
+		}
+
+		Employee.findOneAndUpdate(usernameQuery, request.body, {upsert: true}, (err) => {
+			if (err) {
+				response.send(err);
+				return;
+			}
+
+			response.json({message: 'Employee created'})
+		});
+	});
+
+}
+
+function postEmployee(request, response) {
+	if (!request.body.username) {
+		response.status(403).send({message: 'Employee username required'});
+		return;
+	}
+
+	const usernameQuery = {'username': request.body.username};
+
+	Employee.findOneAndUpdate(usernameQuery, request.body, {upsert: true}, (err) => {
 		if (err) {
 			response.send(err);
 			return;
