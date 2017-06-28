@@ -47,20 +47,20 @@ function getAvailabilityOnDate(request, response) {
 		}
 
 		if (employee[0].timeoff[date]) {
-			response.json({type: 'timeoff', 
+			response.json({type: 'Timeoff', 
 							startTime: employee[0].timeoff[date].startTime, 
 							endTime: employee[0].timeoff[date].endTime
 						});
 		}
 		else if (employee[0].specialAvail[date]) {
-			response.json({type: 'special availability',
+			response.json({type: 'Special availability',
 							startTime: employee[0].specialAvail[date].startTime,
 							endTime: employee[0].specialAvail[date].endTime
 						});
 		}
 		else {
 			const dayusername = moment(date, 'YYYY-MM-DD', true).format('dddd');
-			response.json({type: 'regular availability',
+			response.json({type: 'Regular availability',
 							startTime:employee[0].availability[dayusername].startTime,
 							endTime: employee[0].availability[dayusername].endTime
 						});

@@ -8,7 +8,7 @@ const specialAvailRouter = express.Router();
 
 specialAvailRouter.get('/username/:username', getSpecialAvail);
 specialAvailRouter.post('/username/:username', postSpecialAvail);
-specialAvailRouter.delete('/username/:username', deleteSpecialAvail);
+specialAvailRouter.delete('/username/:username/date/:date', deleteSpecialAvail);
 
 mongoose.connect('localhost:27017');
 
@@ -72,15 +72,15 @@ function deleteSpecialAvail(request, response) {
 			return;
 		}
 
-		let deleteSpecialAvail = request.body;
+		let deleteSpecialAvail = request.params.date;
 		// Validate if the date format is correct
-		if (deleteSpecialAvail.date === undefined || !moment(deleteSpecialAvail.date, 'YYYY-MM-DD', true).isValid()) {
+		if (deleteSpecialAvail === undefined || !moment(deleteSpecialAvail, 'YYYY-MM-DD', true).isValid()) {
 			response.status(403).send({error: 'Date object type validation failed.'});
 			return;
 		}
 
 		const currentSpecialAvail = employee[0].specialAvail;
-		delete currentSpecialAvail[deleteSpecialAvail.date];
+		delete currentSpecialAvail[deleteSpecialAvail];
 		
 		Employee.findOneAndUpdate({username: request.params.username}, {specialAvail: currentSpecialAvail}, (err) => {
 			if (err) {

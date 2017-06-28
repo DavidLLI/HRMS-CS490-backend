@@ -8,7 +8,7 @@ const timeoffRouter = express.Router();
 
 timeoffRouter.get('/username/:username', getTimeoff);
 timeoffRouter.post('/username/:username', postTimeoff);
-timeoffRouter.delete('/username/:username', deleteTimeoff);
+timeoffRouter.delete('/username/:username/date/:date', deleteTimeoff);
 
 mongoose.connect('localhost:27017');
 
@@ -54,9 +54,9 @@ function postTimeoff(request, response) {
 			if (err) {
 				return err;
 			}
-		});
 
-		response.json({message: 'Timeoff post successful'});
+			response.json({message: 'Timeoff post successful'});
+		});
 
 	});
 }
@@ -72,15 +72,15 @@ function deleteTimeoff(request, response) {
 			return;
 		}
 
-		let deleteTimeoff = request.body;
+		let deleteTimeoff = request.params.date;
 		// Validate if the date format is correct
-		if (deleteTimeoff.date === undefined || !moment(deleteTimeoff.date, 'YYYY-MM-DD', true).isValid()) {
+		if (deleteTimeoff === undefined || !moment(deleteTimeoff, 'YYYY-MM-DD', true).isValid()) {
 			response.status(403).send({error: 'Date object type validation failed.'});
 			return;
 		}
 
 		const currentTimeoff = employee[0].timeoff;
-		delete currentTimeoff[deleteTimeoff.date];
+		delete currentTimeoff[deleteTimeoff];
 		
 		Employee.findOneAndUpdate({username: request.params.username}, {timeoff: currentTimeoff}, (err) => {
 			if (err) {
