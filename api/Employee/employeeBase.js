@@ -4,6 +4,7 @@ import Employee from './model';
 import availRouter from './availability';
 import specialAvailRouter from './specialAvail';
 import timeoffRouter from './timeoff';
+import CONFIG from '../../config';
 
 const employeeRouter = express.Router();
 
@@ -19,7 +20,7 @@ employeeRouter.post('/signup', registerEmployee);
 
 employeeRouter.get('/username/:username/password/:password', employeeAuth);
 
-mongoose.connect('localhost:27017');
+mongoose.connect(CONFIG.mongoURL);
 
 function employeeAuth(request, response) {
 	Employee.find({username: request.params.username}, (err, employee) => {
