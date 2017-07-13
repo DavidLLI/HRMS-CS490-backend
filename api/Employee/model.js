@@ -17,7 +17,12 @@ const EmployeeSchema = new Schema({
 	timeSheet: { type: Object, default: {} },
 	startDate: { type: Date, default: '01/01/1970' },
 	endDate: { type: Date, default: '01/01/1970' },
-	type: { type: String, required: true, default: 'employee' }
+	type: { type: String, required: true, default: 'employee' },
+	personality: { type: String, default: '' },
+	skills: { type: Array, default: [] },
+	age: { type: Number, default: 18 },
+	performanceScore: { type: Object, default: {} },
+	department: { type: String, default: '' }
 }, { minimize: false });
 
 const Employee = mongoose.model('Employee', EmployeeSchema);

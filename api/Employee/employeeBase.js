@@ -4,6 +4,7 @@ import Employee from './model';
 import availRouter from './availability';
 import specialAvailRouter from './specialAvail';
 import timeoffRouter from './timeoff';
+import timeSheetRouter from './timesheet';
 import CONFIG from '../../config';
 
 const employeeRouter = express.Router();
@@ -11,6 +12,7 @@ const employeeRouter = express.Router();
 employeeRouter.use('/availability', availRouter);
 employeeRouter.use('/specialAvail', specialAvailRouter);
 employeeRouter.use('/timeoff', timeoffRouter);
+employeeRouter.use('/timeSheet', timeSheetRouter);
 
 employeeRouter.get('/', getAllEmployees);
 employeeRouter.get('/username/:username', getEmployeeByName);
@@ -55,6 +57,11 @@ function getEmployeeByName(request, response) {
 		if (employee.length === 0) {
 			response.status(404).send({message: 'Employee not found'});
 			return;
+		}
+
+		let ret_value = employee;
+		if (request.query.field) {
+			ret_value = employee;
 		}
 
 		response.json(employee);
