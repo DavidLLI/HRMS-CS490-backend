@@ -3,10 +3,11 @@ import express from 'express';
 import Employee from './model';
 import _ from 'lodash';
 import moment from 'moment';
+import CONFIG from '../../config';
 
 const availRouter = express.Router();
 
-mongoose.connect('localhost:27017');
+mongoose.connect(CONFIG.mongoURL);
 
 availRouter.get('/username/:username', getAvailability);
 availRouter.get('/username/:username/date/:date', getAvailabilityOnDate);

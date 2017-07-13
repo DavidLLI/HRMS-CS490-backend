@@ -3,6 +3,7 @@ import express from 'express';
 import Employee from './model';
 import _ from 'lodash';
 import moment from 'moment';
+import CONFIG from '../../config';
 
 const specialAvailRouter = express.Router();
 
@@ -10,7 +11,7 @@ specialAvailRouter.get('/username/:username', getSpecialAvail);
 specialAvailRouter.post('/username/:username', postSpecialAvail);
 specialAvailRouter.delete('/username/:username/date/:date', deleteSpecialAvail);
 
-mongoose.connect('localhost:27017');
+mongoose.connect(CONFIG.mongoURL);
 
 function getSpecialAvail(request, response) {
 	Employee.find({username: request.params.username}, (err, employee) => {

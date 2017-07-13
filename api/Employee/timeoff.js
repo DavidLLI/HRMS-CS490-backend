@@ -3,6 +3,7 @@ import express from 'express';
 import Employee from './model';
 import _ from 'lodash';
 import moment from 'moment';
+import CONFIG from '../../config';
 
 const timeoffRouter = express.Router();
 
@@ -10,7 +11,7 @@ timeoffRouter.get('/username/:username', getTimeoff);
 timeoffRouter.post('/username/:username', postTimeoff);
 timeoffRouter.delete('/username/:username/date/:date', deleteTimeoff);
 
-mongoose.connect('localhost:27017');
+mongoose.connect(CONFIG.mongoURL);
 
 function getTimeoff(request, response) {
 	Employee.find({username: request.params.username}, (err, employee) => {
