@@ -6,6 +6,7 @@ import specialAvailRouter from './specialAvail';
 import timeoffRouter from './timeoff';
 import timeSheetRouter from './timesheet';
 import CONFIG from '../../config';
+import _ from 'lodash';
 
 const employeeRouter = express.Router();
 
@@ -59,12 +60,17 @@ function getEmployeeByName(request, response) {
 			return;
 		}
 
-		let ret_value = employee;
+		let ret_value = [];
 		if (request.query.field) {
+			_.forEach(employee, (em) => {
+				ret_value.push(em[request.query.field]);
+			});
+		}
+		else {
 			ret_value = employee;
 		}
 
-		response.json(employee);
+		response.json(ret_value);
 	});
 }
 
@@ -75,7 +81,17 @@ function getAllEmployees(request, response) {
 			return;
 		}
 
-		response.json(employee);
+		let ret_value = [];
+		if (request.query.field) {
+			_.forEach(employee, (em) => {
+				ret_value.push(em[request.query.field]);
+			});
+		}
+		else {
+			ret_value = employee;
+		}
+
+		response.json(ret_value);
 	});
 }
 
