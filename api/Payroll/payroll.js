@@ -2,6 +2,8 @@ import express from 'express';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import Payroll from './model';
+import CONFIG from '../../config';
+import { broadcast } from '../notifications';
 
 const payrollRouter = express.Router();
 
@@ -9,7 +11,7 @@ payrollRouter.get('/', getAllPayroll);
 payrollRouter.get('/request_id/:request_id', getPayrollById);
 payrollRouter.post('/', postPayroll);
 
-mongoose.connect('localhost:27017');
+mongoose.connect(`${CONFIG.mongoURL}`);
 
 function getPayrollById(request, response) {
 	Payroll.find({request_id: request.params.request_id}, (err, payroll) => {
@@ -56,6 +58,12 @@ function postPayroll(request, response) {
 		_postToFinance(request.body)
 		.then(function() {
 			response.json({message: 'Payroll created'})
+		})
+		.then(function() {
+			broadcast({
+				type: 'PAYROLL',
+				payroll: request.body,
+			});
 		})
 		.catch(function(err) {
 			Payroll.remove(requestQuery);

@@ -3,6 +3,7 @@ import express from 'express';
 import Employee from './model';
 import _ from 'lodash';
 import moment from 'moment';
+import CONFIG from '../../config';
 
 const timeSheetRouter = express.Router();
 
@@ -10,7 +11,7 @@ timeSheetRouter.get('/username/:username', getTimeSheet);
 timeSheetRouter.post('/username/:username', postTimeSheet);
 timeSheetRouter.get('/username/:username/date/:date', getTimeSheetDay);
 
-mongoose.connect('localhost:27017');
+mongoose.connect(`${CONFIG.mongoURL}`);
 
 function getTimeSheetDay(request, response) {
 	Employee.find({username: request.params.username}, (err, employee) => {
