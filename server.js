@@ -2,9 +2,9 @@ import router from './api/router';
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { init } from './api/notifications';
 
 const app = express();
-
 const port = process.env.PORT || 4000;
 
 // Enable cors
@@ -28,10 +28,12 @@ app.get('/', (request, response) => {
 // Register Router
 app.use('/api', router);
 
-app.listen(port, (err) => {  
+const server = app.listen(port, (err) => {  
   if (err) {
     return console.log('something bad happened', err);
   }
 
   console.log(`server is listening on ${port}`)
 });
+
+init(server);
