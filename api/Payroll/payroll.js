@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import axios from 'axios';
 import Payroll from './model';
 
 const payrollRouter = express.Router();
@@ -52,8 +53,22 @@ function postPayroll(request, response) {
 			return;
 		}
 
-		response.json({message: 'Payroll created'})
+		_postToFinance(request.body)
+		.then(function() {
+			response.json({message: 'Payroll created'})
+		})
+		.catch(function(err) {
+			Payroll.remove(requestQuery);
+			response.send(err);
+		});
 	});
+}
+
+function _postToFinance(payroll) {
+	return axios.post(
+		'http://cs490-ais.herokuapp.com/api/payrollentry',
+		payroll
+	);
 }
 
 export default payrollRouter;
